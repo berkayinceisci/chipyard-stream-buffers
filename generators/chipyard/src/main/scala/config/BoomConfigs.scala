@@ -71,6 +71,41 @@ class SimBlockDeviceMegaBoomV3Config extends Config(
   new chipyard.config.AbstractConfig)
 
 // ---------------------
+// BOOM V3 Stream Buffer Prefetcher Configs
+// ---------------------
+
+// Large BOOM with default stream buffer prefetcher (4 entries, 2 lines ahead)
+class LargeBoomV3WithStreamBufferConfig extends Config(
+  new boom.v3.common.WithStreamBufferPrefetcher ++               // enable stream buffer prefetcher
+  new boom.v3.common.WithNLargeBooms(1) ++                       // large boom config
+  new chipyard.config.WithSystemBusWidth(128) ++
+  new chipyard.config.AbstractConfig)
+
+// Large BOOM with aggressive stream buffer prefetcher (8 entries, 4 lines ahead)
+class LargeBoomV3WithAggressiveStreamBufferConfig extends Config(
+  new boom.v3.common.WithStreamBufferParams(
+    nEntries = 8,
+    nPrefetchAhead = 4,
+    detectStride = false,
+    trainThreshold = 1
+  ) ++
+  new boom.v3.common.WithNLargeBooms(1) ++
+  new chipyard.config.WithSystemBusWidth(128) ++
+  new chipyard.config.AbstractConfig)
+
+// Mega BOOM with stride-detecting stream buffer prefetcher
+class MegaBoomV3WithStrideStreamBufferConfig extends Config(
+  new boom.v3.common.WithStreamBufferParams(
+    nEntries = 8,
+    nPrefetchAhead = 4,
+    detectStride = true,
+    trainThreshold = 2
+  ) ++
+  new boom.v3.common.WithNMegaBooms(1) ++
+  new chipyard.config.WithSystemBusWidth(128) ++
+  new chipyard.config.AbstractConfig)
+
+// ---------------------
 // BOOM V4 Configs
 // Less stable and performant, but with more advanced micro-architecture
 // Use for PD exploration
